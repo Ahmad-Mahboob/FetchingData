@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Data to DB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Data</h2>
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname">
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname">
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+        document.querySelector("#submit").addEventListener("click", async () => {
+            const fname = document.querySelector("#fname").value;
+            const lname = document.querySelector("#lname").value;
+
+            if (!fname || !lname) {
+                alert("Please fill out both fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/add-data", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fname, lname })
+                });
+
+                if (response.ok) {
+                    alert("Data added successfully!");
+                    document.querySelector("#fname").value = "";
+                    document.querySelector("#lname").value = "";
+                } else {
+                    alert("Failed to add data.");
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                alert("An error occurred while adding data.");
+            }
+        });
+    </script>
+</body>
+</html>
